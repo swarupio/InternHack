@@ -8,6 +8,7 @@ import type { VerifiedSkill, ProjectItem, SkillTest } from "../../../lib/types";
 import api from "../../../lib/axios";
 import { uploadDirectToS3 } from "../../../utils/upload";
 import { useAuthStore } from "../../../lib/auth.store";
+import { isValidPhone } from "../../../lib/phone";
 import { SEO } from "../../../components/SEO";
 import { LoadingScreen } from "../../../components/LoadingScreen";
 import { Button } from "../../../components/ui/button";
@@ -290,8 +291,7 @@ export default function StudentProfilePage() {
       toast.error("Name must be at least 2 characters"); return false;
     }
     if (form.contactNo && form.contactNo.trim()) {
-      const normalizedPhone = form.contactNo.replace(/[\s-]/g, "");
-      if (!/^\+\d{11,13}$/.test(normalizedPhone)) {
+      if (!isValidPhone(form.contactNo)) {
         toast.error("Phone must include country code (e.g. +91 9876543210)");
         setFieldErrors((prev) => ({ ...prev, contactNo: ["Phone must include country code (e.g. +91 9876543210)"] }));
         setOpenSections((prev) => ({ ...prev, basic: true }));

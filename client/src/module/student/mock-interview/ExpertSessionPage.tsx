@@ -19,6 +19,7 @@ import api from "../../../lib/axios";
 import { Button } from "../../../components/ui/button";
 import { Textarea } from "../../../components/ui/textarea";
 import { useAuthStore } from "../../../lib/auth.store";
+import { isValidPhone } from "../../../lib/phone";
 import { queryKeys } from "../../../lib/query-keys";
 
 type Step = "prep" | "slot" | "review" | "confirmed";
@@ -117,8 +118,7 @@ export default function ExpertSessionPage() {
     if (hasContact) return true;
     const val = contactInput.trim();
     if (!val) return true;
-    const normalized = val.replace(/[\s-]/g, "");
-    if (!/^\+\d{11,13}$/.test(normalized)) {
+    if (!isValidPhone(val)) {
       toast.error("Phone must include country code (e.g. +91 9876543210)");
       return false;
     }
@@ -205,8 +205,7 @@ export default function ExpertSessionPage() {
       mode,
       displayType: "overlay",
       onEvent: (event) => {
-        if (event.event_type === "checkout.status") {
-          const status = (event.data?.message as { status?: string })?.status;
+        if (event.event_type === "checkout.status") {          const status = (event.data?.message as { status?: string })?.status;
           if (status === "succeeded" && bookingIdRef.current) {
             // Dismiss the Dodo overlay ourselves — this flow confirms in-app by
             // polling (no return_url redirect), so nothing else closes it. Without
@@ -446,7 +445,6 @@ export default function ExpertSessionPage() {
                 <span className="text-xs font-mono uppercase tracking-widest text-stone-400 block">
                   Pick a day and time (IST)
                 </span>
-
                 {loadingSlots ? (
                   <div className="flex justify-center py-10">
                     <Loader2 className="w-6 h-6 animate-spin text-stone-400" />
@@ -673,7 +671,6 @@ export default function ExpertSessionPage() {
               </motion.div>
             )}
           </AnimatePresence>
-
           {/* My sessions */}
           {mySessions && mySessions.length > 0 && step !== "confirmed" && (
             <div className="mt-8">

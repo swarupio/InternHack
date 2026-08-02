@@ -10,7 +10,7 @@ import type { AxiosError } from "axios";
 import { Button } from "../../../components/ui/button";
 import { Textarea } from "../../../components/ui/textarea";
 import { useAuthStore } from "../../../lib/auth.store";
-import { whatsAppLink } from "../../../lib/whatsapp";
+import { isValidPhone, whatsAppLink } from "../../../lib/phone";
 import { queryKeys } from "../../../lib/query-keys";
 import type {
   PeerMockInterview,
@@ -811,8 +811,7 @@ export default function PeerMockInterviewPage() {
     if (hasContact) return true;
     const val = contactInput.trim();
     if (!val) return true;
-    const normalized = val.replace(/[\s-]/g, "");
-    if (!/^\+\d{11,13}$/.test(normalized)) {
+    if (!isValidPhone(val)) {
       toast.error("Phone must include country code (e.g. +91 9876543210)");
       return false;
     }
@@ -1262,8 +1261,7 @@ export default function PeerMockInterviewPage() {
                       ))}
                     </div>
                   </div>
-
-                  <div className="space-y-2 border-t border-stone-100 dark:border-white/5 pt-4">
+                 <div className="space-y-2 border-t border-stone-100 dark:border-white/5 pt-4">
                     <span className="text-xs font-mono uppercase tracking-widest text-stone-400 block">
                       Help your partner prepare for you
                     </span>
