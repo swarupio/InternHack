@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Calendar, Crown, FileText, ArrowRightCircle, CheckCircle2 } from "lucide-react";
 import { MetaRow } from "./MetaRow";
 import { cardCls } from "./styles";
+import { Button } from "../../../../components/ui/button";
 
 export type MissingItem = { id: string; label: string; section: string };
 
@@ -58,22 +59,27 @@ export function ProfileStrengthCard({
       {missingItems.length > 0 ? (
         <div className="mt-4 space-y-2">
           {missingItems.slice(0, 4).map((item, i) => (
-            <motion.button
+            <motion.div
               key={item.id}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 + i * 0.1 }}
-              onClick={() => onFixItem(item.section)}
-              className="w-full group flex items-center justify-between p-2.5 rounded-md border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-white/5 hover:border-lime-400 hover:bg-lime-50 dark:hover:bg-lime-400/10 transition-colors text-left"
             >
-              <span className="text-xs font-medium text-stone-700 dark:text-stone-300 group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">
-                {item.label}
-              </span>
-              <ArrowRightCircle className="w-4 h-4 text-stone-400 group-hover:text-lime-500 transition-colors shrink-0" />
-            </motion.button>
+              <Button
+                mode="default"
+                variant="ghost"
+                onClick={() => onFixItem(item.section)}
+                className="w-full group flex items-center justify-between p-2.5 rounded-md border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-white/5 hover:border-lime-400 hover:bg-lime-50 dark:hover:bg-lime-400/10 transition-colors text-left"
+              >
+                <span className="text-xs font-medium text-stone-700 dark:text-stone-300 group-hover:text-stone-900 dark:group-hover:text-stone-50 transition-colors">
+                  {item.label}
+                </span>
+                <ArrowRightCircle className="w-4 h-4 text-stone-400 group-hover:text-lime-500 transition-colors shrink-0" />
+              </Button>
+            </motion.div>
           ))}
           {missingItems.length > 4 && (
-            <p className="text-[10px] font-mono text-center text-stone-400 pt-1">
+            <p className="text-xs font-mono text-center text-stone-400 pt-1">
               + {missingItems.length - 4} more items
             </p>
           )}
